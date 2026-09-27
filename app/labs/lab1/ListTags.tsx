@@ -1,10 +1,10 @@
 export default function ListTags() {
     return (
-      <div id="wd-list-tags">
+      <div id="wd-lists">
         <h4>List Tags</h4>
   
         <h5>How to make pancakes</h5>
-        <ol>
+        <ol id="wd-pancakes">
           <li>Mix the dry ingredients.</li>
           <li>Add milk and eggs.</li>
           <li>Mix until the batter is smooth.</li>
