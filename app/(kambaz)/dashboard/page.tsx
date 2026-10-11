@@ -10,16 +10,20 @@ export default function Dashboard() {
       <hr />
 
       <h2 id="wd-dashboard-published">
-        Published Courses (3)
+        Published Courses (4)
       </h2>
 
       <hr />
 
-      <div id="wd-dashboard-courses">
+      <div
+        id="wd-dashboard-courses"
+        className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-8 py-4"
+      >
+        {/* On your own: personalize this course subtitle. */}
         <CourseCard
           id="1234"
           title="CS1234 React JS"
-          subtitle="Full Stack software developer"
+          subtitle="Building React interfaces that works"
           image="/images/reactjs.jpg"
         />
 
@@ -35,6 +39,14 @@ export default function Dashboard() {
           title="CS3456 MongoDB"
           subtitle="NoSQL Databases"
           image="/images/mongodb.jpg"
+        />
+
+        {/* With AI: a separate fourth sample card. */}
+        <CourseCard
+          id="CS9999"
+          title="CS9999 Sample Course"
+          subtitle="Assistant-generated sample — not my course"
+          image="/images/reactjs.jpg"
         />
       </div>
     </div>

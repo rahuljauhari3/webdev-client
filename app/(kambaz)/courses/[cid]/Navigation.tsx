@@ -1,53 +1,94 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import "../../kambaz.css";
 
-export default function CourseNavigation({ cid }: { cid: string }) {
+export default function CourseNavigation({
+  cid,
+}: {
+  cid: string;
+}) {
+  const pathname = usePathname();
+
+  const links = [
+    {
+      path: "home",
+      label: "Home",
+      id: "wd-course-home-link",
+    },
+    {
+      path: "modules",
+      label: "Modules",
+      id: "wd-course-modules-link",
+    },
+    {
+      path: "piazza",
+      label: "Piazza",
+      id: "wd-course-piazza-link",
+    },
+    {
+      path: "zoom",
+      label: "Zoom",
+      id: "wd-course-zoom-link",
+    },
+    {
+      path: "assignments",
+      label: "Assignments",
+      id: "wd-course-assignments-link",
+    },
+    {
+      path: "quizzes",
+      label: "Quizzes",
+      id: "wd-course-quizzes-link",
+    },
+    {
+      path: "grades",
+      label: "Grades",
+      id: "wd-course-grades-link",
+    },
+    {
+      path: "people/table",
+      label: "People",
+      id: "wd-course-people-link",
+    },
+  ];
+
   return (
-    <div id="wd-courses-navigation">
-      <Link href={`/courses/${cid}/home`} id="wd-course-home-link">
-        Home
-      </Link>{" "}
-      <br />
+    <nav
+      id="wd-courses-navigation"
+      aria-label="Course navigation"
+      className="wd list-group text-lg"
+    >
+      {/* On your own: apply the pattern to every course link. */}
+      {links.map((link) => {
+        const href = `/courses/${cid}/${link.path}`;
 
-      <Link href={`/courses/${cid}/modules`} id="wd-course-modules-link">
-        Modules
-      </Link>{" "}
-      <br />
+        const active =
+          pathname === href ||
+          pathname.startsWith(`${href}/`);
 
-      <Link href={`/courses/${cid}/piazza`} id="wd-course-piazza-link">
-        Piazza
-      </Link>{" "}
-      <br />
+        return (
+          <Link
+            key={link.id}
+            id={link.id}
+            href={href}
+            aria-current={active ? "page" : undefined}
+            className={`list-group-item${active ? " active" : ""}`}
+          >
+            {link.label}
+          </Link>
+        );
+      })}
 
-      <Link href={`/courses/${cid}/zoom`} id="wd-course-zoom-link">
-        Zoom
-      </Link>{" "}
-      <br />
-
+      {/* With AI: an additional sample link. */}
       <Link
-        href={`/courses/${cid}/assignments`}
-        id="wd-course-assignments-link"
+        id="wd-course-ai-link"
+        href={`/courses/${cid}/home`}
+        className="list-group-item border-0 text-red-600"
       >
-        Assignments
-      </Link>{" "}
-      <br />
-
-      <Link href={`/courses/${cid}/quizzes`} id="wd-course-quizzes-link">
-        Quizzes
-      </Link>{" "}
-      <br />
-
-      <Link href={`/courses/${cid}/grades`} id="wd-course-grades-link">
-        Grades
-      </Link>{" "}
-      <br />
-
-      <Link
-        href={`/courses/${cid}/people/table`}
-        id="wd-course-people-link"
-      >
-        People
-      </Link>{" "}
-      <br />
-    </div>
+        Sample
+      </Link>
+    </nav>
   );
 }

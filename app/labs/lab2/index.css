@@ -1,0 +1,440 @@
+/* Lab 2 only: :where scopes these demonstrations without adding specificity. */
+/* Stage 2.1.2 only: #wd-lab2 p { background: green; color: white; }
+   Leave the temporary rule commented out in the completed page. */
+#wd-lab2 {
+  padding: 12px 12px 70px;
+}
+#wd-lab2 > div {
+  margin-bottom: 28px;
+}
+:where(#wd-lab2) h3 {
+  background-color: #e0f2fe;
+  color: #075985;
+}
+
+/* With AI: extra tag selector */
+:where(#wd-lab2) h2 {
+  background-color: navy;
+  color: white;
+}
+:where(#wd-lab2) p#wd-id-selector-1 {
+  background-color: red;
+  color: white;
+}
+:where(#wd-lab2) p#wd-id-selector-2 {
+  background-color: yellow;
+  color: black;
+}
+:where(#wd-lab2) p#wd-id-selector-3 {
+  background-color: teal;
+  color: white;
+}
+:where(#wd-lab2) p#wd-ai-id-selector {
+  background-color: purple;
+  color: white;
+}
+:where(#wd-lab2) .wd-class-selector {
+  background-color: yellow;
+  color: blue;
+}
+:where(#wd-lab2) .wd-your-class {
+  background-color: #dcfce7;
+  color: #14532d;
+}
+:where(#wd-lab2) .wd-ai-class-selector {
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+:where(#wd-lab2) .wd-selector-1 .wd-selector-3 {
+  background-color: green;
+  color: white;
+}
+:where(#wd-lab2) .wd-selector-2 > .wd-selector-3 > .wd-selector-4 {
+  background-color: yellow;
+  color: black;
+}
+:where(#wd-lab2) .wd-selector-3 > .wd-personal-selector {
+  background-color: pink;
+  color: black;
+}
+:where(#wd-lab2) .wd-selector-1 .wd-ai-selector-5 {
+  background-color: purple;
+  color: white;
+}
+/* On your own practice: the ID beats class/tag. Equal ID specificity: later wins. */
+:where(#wd-personal-cascade-demo) p {
+  background-color: lightblue;
+}
+:where(#wd-personal-cascade-demo) .wd-personal-cascade {
+  background-color: gold;
+}
+:where(#wd-personal-cascade-demo) #wd-personal-cascade {
+  background-color: teal;
+  color: white;
+}
+:where(#wd-personal-cascade-demo) #wd-personal-cascade {
+  background-color: darkgreen;
+}
+/* With AI: the ID wins (red); :where does not change specificity. */
+:where(#wd-ai-cascade-demo) p {
+  background-color: green;
+}
+:where(#wd-ai-cascade-demo) .wd-ai-cascade {
+  background-color: yellow;
+}
+:where(#wd-ai-cascade-demo) #wd-ai-cascade {
+  background-color: red;
+  color: white;
+}
+:where(#wd-lab2) .wd-fg-color-black {
+  color: black;
+}
+:where(#wd-lab2) .wd-fg-color-white {
+  color: white;
+}
+:where(#wd-lab2) .wd-fg-color-blue {
+  color: #7070ff;
+}
+:where(#wd-lab2) .wd-fg-color-red {
+  color: #ff7070;
+}
+:where(#wd-lab2) .wd-fg-color-green {
+  color: green;
+}
+:where(#wd-lab2) .wd-bg-color-yellow {
+  background-color: #ffff07;
+}
+:where(#wd-lab2) .wd-bg-color-blue {
+  background-color: #7070ff;
+}
+:where(#wd-lab2) .wd-bg-color-red {
+  background-color: #ff7070;
+}
+:where(#wd-lab2) .wd-bg-color-green {
+  background-color: green;
+}
+:where(#wd-lab2) .wd-bg-color-gray {
+  background-color: lightgray;
+}
+:where(#wd-lab2) .wd-border-fat {
+  border-width: 20px 30px;
+}
+:where(#wd-lab2) .wd-border-thin {
+  border-width: 4px;
+}
+:where(#wd-lab2) .wd-border-solid {
+  border-style: solid;
+}
+:where(#wd-lab2) .wd-border-dashed {
+  border-style: dashed;
+}
+:where(#wd-lab2) .wd-border-yellow {
+  border-color: #ffff07;
+}
+:where(#wd-lab2) .wd-border-red {
+  border-color: #ff7070;
+}
+:where(#wd-lab2) .wd-border-blue {
+  border-color: #7070ff;
+}
+:where(#wd-lab2) .wd-padded-top-left {
+  padding-top: 50px;
+  padding-left: 50px;
+}
+:where(#wd-lab2) .wd-padded-bottom-right {
+  padding-bottom: 50px;
+  padding-right: 50px;
+}
+:where(#wd-lab2) .wd-padding-fat {
+  padding: 50px;
+}
+:where(#wd-lab2) .wd-personal-padding {
+  padding-left: 35px;
+  padding-bottom: 15px;
+}
+:where(#wd-lab2) .wd-ai-padding-top {
+  padding-top: 30px;
+}
+:where(#wd-lab2) .wd-margin-bottom {
+  margin-bottom: 50px;
+}
+:where(#wd-lab2) .wd-margin-right-left {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+:where(#wd-lab2) .wd-margin-all-around {
+  margin: 30px;
+}
+:where(#wd-lab2) .wd-box-model-parent {
+  display: flow-root;
+  background: #d1d5db;
+  padding: 12px;
+}
+:where(#wd-lab2) .wd-box-model-box {
+  position: relative;
+  border: 20px solid #ff7070;
+  padding: 36px;
+  margin: 40px;
+  background: #fef08a;
+}
+:where(#wd-lab2) .wd-box-model-content {
+  padding: 20px;
+  background: #bfdbfe;
+  text-align: center;
+}
+:where(#wd-lab2) .wd-box-model-border-label {
+  position: absolute;
+  top: -19px;
+  left: 5px;
+}
+:where(#wd-lab2) .wd-box-model-padding-label {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+:where(#wd-lab2) .wd-box-model-margin-label {
+  position: absolute;
+  bottom: -52px;
+  left: 5px;
+  white-space: nowrap;
+}
+:where(#wd-lab2) .wd-box-sizing-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 16px;
+}
+:where(#wd-lab2) .wd-box-sizing-demo > div {
+  width: 200px;
+  padding: 20px;
+  border: 10px solid #7070ff;
+  background: #ffff07;
+}
+:where(#wd-lab2) .wd-box-sizing-content {
+  box-sizing: content-box;
+}
+:where(#wd-lab2) .wd-box-sizing-border {
+  box-sizing: border-box;
+}
+:where(#wd-lab2) .wd-box-sizing-demo > .wd-personal-box-sizing {
+  width: 240px;
+  box-sizing: border-box;
+}
+:where(#wd-lab2) .wd-rounded-corners-top {
+  border-radius: 40px 40px 0 0;
+}
+:where(#wd-lab2) .wd-rounded-corners-bottom {
+  border-radius: 0 0 40px 40px;
+}
+:where(#wd-lab2) .wd-rounded-corners-all-around {
+  border-radius: 50px;
+}
+:where(#wd-lab2) .wd-rounded-corners-inline {
+  border-radius: 30px 0 20px 50px;
+}
+:where(#wd-lab2) .wd-personal-rounded {
+  border-radius: 0 50px 0 50px;
+}
+:where(#wd-lab2) .wd-ai-rounded-left {
+  border-radius: 40px 0 0 40px;
+}
+:where(#wd-lab2) .wd-dimension-portrait {
+  width: 75px;
+  height: 100px;
+}
+:where(#wd-lab2) .wd-dimension-landscape {
+  width: 100px;
+  height: 75px;
+}
+:where(#wd-lab2) .wd-dimension-square {
+  width: 75px;
+  height: 75px;
+}
+:where(#wd-lab2) .wd-personal-dimension {
+  width: 160px;
+  height: 80px;
+}
+:where(#wd-lab2) .wd-ai-dimension-box {
+  width: 120px;
+  height: 60px;
+  background: yellow;
+}
+:where(#wd-lab2) .wd-display-inline {
+  display: inline;
+  width: 150px;
+  height: 50px;
+  padding: 5px;
+}
+:where(#wd-lab2) .wd-display-inline-block {
+  display: inline-block;
+  width: 150px;
+  height: 50px;
+  padding: 5px;
+}
+:where(#wd-lab2) .wd-display-block {
+  display: block;
+  width: 150px;
+  height: 50px;
+  padding: 5px;
+}
+:where(#wd-lab2) .wd-pos-relative {
+  position: relative;
+}
+:where(#wd-lab2) .wd-pos-relative-nudge-up-right {
+  position: relative;
+  bottom: 30px;
+  left: 30px;
+}
+:where(#wd-lab2) .wd-pos-relative-nudge-down-right {
+  position: relative;
+  top: 20px;
+  left: 20px;
+}
+:where(#wd-lab2) .wd-personal-relative {
+  position: relative;
+  top: 10px;
+  left: 45px;
+}
+:where(#wd-lab2) .wd-ai-pos-relative-nudge {
+  position: relative;
+  top: 15px;
+  right: 25px;
+}
+:where(#wd-lab2) .wd-pos-absolute-10-10 {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+:where(#wd-lab2) .wd-pos-absolute-50-50 {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}
+:where(#wd-lab2) .wd-pos-absolute-120-20 {
+  position: absolute;
+  top: 20px;
+  left: 120px;
+}
+:where(#wd-lab2) .wd-personal-absolute {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+:where(#wd-lab2) .wd-ai-pos-absolute-br {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+:where(#wd-lab2) .wd-pos-fixed {
+  position: fixed;
+  right: 0;
+  bottom: 50%;
+}
+:where(#wd-lab2) .wd-personal-fixed {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  background: teal;
+  color: white;
+  padding: 8px;
+  z-index: 30;
+}
+:where(#wd-lab2) .wd-ai-pos-fixed {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: purple;
+  color: white;
+  padding: 8px;
+  z-index: 30;
+}
+:where(#wd-lab2) .wd-zindex-bring-to-front {
+  z-index: 10;
+}
+:where(#wd-lab2) .wd-personal-zindex {
+  position: absolute;
+  top: 65px;
+  left: 140px;
+  z-index: 5;
+}
+:where(#wd-lab2) .wd-ai-zindex-top {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  z-index: 20;
+}
+:where(#wd-lab2) .wd-float-left {
+  float: left;
+  height: 100px;
+}
+:where(#wd-lab2) .wd-float-right {
+  float: right;
+  height: 100px;
+}
+:where(#wd-lab2) img.wd-float-left,
+:where(#wd-lab2) img.wd-float-right {
+  width: auto;
+  max-width: 35%;
+  object-fit: cover;
+}
+:where(#wd-lab2) img.wd-float-left {
+  margin: 0 16px 8px 0;
+}
+:where(#wd-lab2) img.wd-float-right {
+  margin: 0 0 8px 16px;
+}
+:where(#wd-lab2) .wd-float-done {
+  clear: both;
+}
+:where(#wd-lab2) .wd-grid-row {
+  clear: both;
+  display: flow-root;
+  margin-bottom: 8px;
+}
+:where(#wd-lab2) .wd-grid-col-half-page {
+  width: 50%;
+  float: left;
+}
+:where(#wd-lab2) .wd-grid-col-third-page {
+  width: 33%;
+  float: left;
+}
+:where(#wd-lab2) .wd-grid-col-two-thirds-page {
+  width: 67%;
+  float: left;
+}
+:where(#wd-lab2) .wd-grid-col-left-sidebar,
+:where(#wd-lab2) .wd-grid-col-right-sidebar {
+  width: 20%;
+  float: left;
+}
+:where(#wd-lab2) .wd-grid-col-main-content {
+  width: 60%;
+  float: left;
+}
+:where(#wd-lab2) .wd-personal-quarter {
+  width: 25%;
+  float: left;
+}
+:where(#wd-lab2) .wd-personal-three-quarters {
+  width: 75%;
+  float: left;
+}
+:where(#wd-lab2) .wd-flex-row-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+}
+:where(#wd-lab2) .wd-flex-row-container > div {
+  box-sizing: border-box;
+  height: 100px;
+  padding: 10px;
+  white-space: nowrap;
+}
+:where(#wd-lab2) .wd-flex-grow-1 {
+  flex-grow: 1;
+}
+:where(#wd-lab2) .wd-width-110px {
+  width: 110px;
+  flex-shrink: 0;
+}

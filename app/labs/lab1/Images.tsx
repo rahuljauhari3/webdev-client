@@ -2,7 +2,7 @@ export default function Images() {
     return (
       <div id="wd-images">
         <h4>Images</h4>
-  
+
         <h5>Remote image</h5>
         <img
           id="wd-startship"
@@ -10,7 +10,7 @@ export default function Images() {
           alt="SpaceX Starship"
           width="400"
         />
-  
+
         <h5>Local image</h5>
         <img
           id="wd-teslabot"

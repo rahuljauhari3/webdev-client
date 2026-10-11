@@ -1,0 +1,46 @@
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+
+#wd-kambaz {
+  font-family: system-ui, sans-serif;
+  color: #212529;
+  line-height: 1.5;
+}
+
+#wd-kambaz,
+#wd-kambaz * {
+  box-sizing: border-box;
+}
+
+/* Reserve space when the fixed sidebar is visible. */
+@media (min-width: 768px) {
+  #wd-kambaz .wd-main-content-offset {
+    margin-left: 120px;
+  }
+}
+
+#wd-kambaz .list-group.wd {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#wd-kambaz .list-group.wd > .list-group-item {
+  display: block;
+  padding: 0.4rem 0.75rem;
+  text-decoration: none;
+
+  border: 0;
+  border-left: 3px solid transparent;
+
+  color: #dc2626;
+  background-color: transparent;
+  white-space: nowrap;
+}
+
+#wd-kambaz .list-group.wd > .list-group-item.active {
+  color: black;
+  background-color: white;
+  border-left-color: black;
+  font-weight: 600;
+}

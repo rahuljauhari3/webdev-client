@@ -4,16 +4,40 @@ import Lesson from "./Lesson";
 export default function Modules() {
   return (
     <div>
-      <button>Collapse All</button>{" "}
-      <button>View Progress</button>{" "}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          className="rounded border border-neutral-300 bg-white px-3 py-1.5 text-sm"
+        >
+          Collapse All
+        </button>
 
-      <select defaultValue="publish-all">
-        <option value="publish-all">Publish All</option>
-      </select>{" "}
+        <button
+          type="button"
+          className="rounded border border-neutral-300 bg-white px-3 py-1.5 text-sm"
+        >
+          View Progress
+        </button>
 
-      <button>+ Module</button>
+        <select
+          aria-label="Publish modules"
+          defaultValue="publish-all"
+          className="rounded border border-neutral-300 bg-white px-3 py-1.5 text-sm"
+        >
+          <option value="publish-all">
+            Publish All
+          </option>
+        </select>
 
-      <ul id="wd-modules">
+        <button
+          type="button"
+          className="rounded border border-red-600 bg-red-600 px-3 py-1.5 text-sm text-white"
+        >
+          + Module
+        </button>
+      </div>
+
+      <ul id="wd-modules" className="m-0 list-none p-0">
         <Module title="Week 1, Lecture 1 - Course Introduction, Syllabus, Agenda">
           <Lesson title="LEARNING OBJECTIVES">
             <li className="wd-content-item">
@@ -62,6 +86,28 @@ export default function Modules() {
           <Lesson title="LEARNING OBJECTIVES">
             <li className="wd-content-item">
               CSS Styling
+            </li>
+          </Lesson>
+        </Module>
+
+        {/* On your own practice: personalize this module. */}
+        <Module title="My CSS Practice">
+          <Lesson title="PRACTICE GOALS">
+            <li className="wd-content-item">
+              Compare layouts on a phone and desktop.
+            </li>
+
+            <li className="wd-content-item">
+              Practice spacing, borders, and typography.
+            </li>
+          </Lesson>
+        </Module>
+
+        {/* With AI: a separate sample module and lesson. */}
+        <Module title="Sample module (AI)">
+          <Lesson title="Sample lesson (AI)">
+            <li className="wd-content-item">
+              A sample lesson demonstrating the shared styling.
             </li>
           </Lesson>
         </Module>

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import CourseNavigation from "./Navigation";
 
 export default async function CoursesLayout({
@@ -16,19 +16,15 @@ export default async function CoursesLayout({
 
       <hr />
 
-      <table>
-        <tbody>
-          <tr>
-            <td valign="top" width="200">
-              <CourseNavigation cid={cid} />
-            </td>
+      <div className="flex gap-4 pt-4">
+        <div className="hidden w-[140px] shrink-0 md:block">
+          <CourseNavigation cid={cid} />
+        </div>
 
-            <td valign="top" width="100%">
-              {children}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div className="min-w-0 flex-1">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

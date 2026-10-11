@@ -1,0 +1,85 @@
+:where(#wd-lab2) .wd-media-queries-demo {
+  padding: 1rem;
+  background: green;
+  color: white;
+}
+:where(#wd-lab2) .wd-media-queries-demo li {
+  opacity: 0.55;
+  font-weight: normal;
+  text-decoration: none;
+}
+:where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-default {
+  opacity: 1;
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* Half-open ranges avoid ambiguous double highlights at shared edges. */
+@media (750px <= width < 1000px) {
+  :where(#wd-lab2) .wd-media-queries-demo {
+    background: yellow;
+    color: black;
+  }
+  :where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-750 {
+    opacity: 1;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+@media (1000px <= width < 1250px) {
+  :where(#wd-lab2) .wd-media-queries-demo {
+    background: blue;
+    color: white;
+  }
+  :where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-1000 {
+    opacity: 1;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+@media (min-width: 1250px) {
+  :where(#wd-lab2) .wd-media-queries-demo {
+    background: red;
+    color: white;
+  }
+  :where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-1250 {
+    opacity: 1;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+/* On your own practice: a new breakpoint, above the course's existing ranges. */
+@media (min-width: 1500px) {
+  :where(#wd-lab2) .wd-media-queries-demo {
+    background: teal;
+    color: white;
+  }
+  :where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-1250 {
+    opacity: 0.55;
+    font-weight: normal;
+    text-decoration: none;
+  }
+  :where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-personal {
+    opacity: 1;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+/* With AI */
+@media (max-width: 749px) {
+  :where(#wd-lab2) .wd-media-queries-demo {
+    background: purple;
+    color: white;
+  }
+  :where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-ai {
+    opacity: 1;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+@media (max-width: 749px), (min-width: 750px) {
+  :where(#wd-lab2) .wd-media-queries-demo .wd-mq-rule-default {
+    opacity: 0.55;
+    font-weight: normal;
+    text-decoration: none;
+  }
+}
