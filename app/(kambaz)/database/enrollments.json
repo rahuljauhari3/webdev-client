@@ -1,0 +1,7 @@
+[
+  { "_id": "E1", "user": "U1", "course": "1234" },
+  { "_id": "E2", "user": "U2", "course": "1234" },
+  { "_id": "E3", "user": "U1", "course": "2345" },
+  { "_id": "E4", "user": "U3", "course": "2345" },
+  { "_id": "E5", "user": "U2", "course": "3456" }
+]

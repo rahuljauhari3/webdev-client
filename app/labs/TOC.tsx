@@ -1,61 +1,54 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const links = [
+  { href: "/labs", label: "Home" },
+  { href: "/labs/lab1", label: "Lab 1" },
+  { href: "/labs/lab2", label: "Lab 2" },
+  { href: "/labs/lab3", label: "Lab 3" },
+  { href: "/labs/lab4", label: "Lab 4" },
+  { href: "/labs/lab5", label: "Lab 5" },
+  { href: "/dashboard", label: "Kambaz" },
+];
 
 export default function TOC() {
+  const pathname = usePathname();
+
   return (
-    <ul>
-      <li>
-        <Link href="/labs" id="wd-home-link">
-          Home
-        </Link>
-      </li>
+    <nav aria-label="Labs navigation" className="p-2">
+      <p className="font-semibold">Rahul Manish Jauhari</p>
+      <a
+        href="https://github.com/rahuljauhari3/webdev-client"
+        className="text-blue-700 underline"
+      >
+        GitHub repository
+      </a>
 
-      <li>
-        <Link href="/labs/lab1">
-          Lab 1
-        </Link>
-      </li>
+      <ul className="mt-4 space-y-2">
+        {links.map(({ href, label }) => {
+          const active =
+            pathname === href ||
+            (href !== "/labs" && pathname.startsWith(`${href}/`));
 
-      <li>
-        <Link href="/labs/lab2">
-          Lab 2
-        </Link>
-      </li>
-
-      <li>
-        <Link href="/labs/lab3">
-          Lab 3
-        </Link>
-      </li>
-
-      <li>
-        <Link href="/labs/lab4" id="wd-lab4-link">
-          Lab 4
-        </Link>
-      </li>
-
-      <li>
-        <Link href="/labs/lab5">
-          Lab 5
-        </Link>
-      </li>
-
-      <li>
-        <Link href="/" id="wd-kambaz-link">
-          Kambaz
-        </Link>
-      </li>
-
-      {/* On your own */}
-      <li>
-        Rahul — learning web development one layer at a time.
-      </li>
-
-      {/* With AI */}
-      <li>
-        <Link href="/book/ch1" id="wd-toc-book-link">
-          Chapter 1
-        </Link>
-      </li>
-    </ul>
+          return (
+            <li key={href}>
+              <Link
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={
+                  active
+                    ? "block rounded bg-red-600 p-2 text-white"
+                    : "block rounded p-2 text-blue-700"
+                }
+              >
+                {label}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }

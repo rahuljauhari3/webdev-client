@@ -1,27 +1,55 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-
-import {
-  FaCalendarAlt,
-  FaFlask,
-  FaInbox,
-} from "react-icons/fa";
-
-import {
-  FaCircleQuestion,
-  FaRegCircleUser,
-} from "react-icons/fa6";
-
+import { usePathname } from "next/navigation";
+import { FaCalendarAlt, FaFlask, FaInbox } from "react-icons/fa";
+import { FaRegCircleUser } from "react-icons/fa6";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { LiaBookSolid } from "react-icons/lia";
 
-const tile =
-  "block bg-black py-3 text-center text-white no-underline";
-
-const icon =
-  "mx-auto mb-1 block text-3xl text-red-600";
+const links = [
+  {
+    label: "Account",
+    href: "/account",
+    prefix: "/account",
+    icon: FaRegCircleUser,
+  },
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    prefix: "/dashboard",
+    icon: AiOutlineDashboard,
+  },
+  {
+    label: "Courses",
+    href: "/dashboard",
+    prefix: "/courses",
+    icon: LiaBookSolid,
+  },
+  {
+    label: "Calendar",
+    href: "/calendar",
+    prefix: "/calendar",
+    icon: FaCalendarAlt,
+  },
+  {
+    label: "Inbox",
+    href: "/inbox",
+    prefix: "/inbox",
+    icon: FaInbox,
+  },
+  {
+    label: "Labs",
+    href: "/labs",
+    prefix: "/labs",
+    icon: FaFlask,
+  },
+];
 
 export default function KambazNavigation() {
+  const pathname = usePathname();
+
   return (
     <nav
       id="wd-kambaz-navigation"
@@ -33,83 +61,36 @@ export default function KambazNavigation() {
         href="https://www.northeastern.edu/"
         target="_blank"
         rel="noreferrer"
-        className={tile}
+        className="block py-3"
       >
         <Image
           src="/images/NEU.png"
           width={75}
           height={75}
           alt="Northeastern University"
-          className="mx-auto block"
+          className="mx-auto"
         />
       </a>
 
-      <Link
-        id="wd-account-link"
-        href="/account"
-        className={tile}
-      >
-        <FaRegCircleUser
-          className="mx-auto mb-1 block text-3xl text-white"
-        />
-        Account
-      </Link>
+      {links.map(({ label, href, prefix, icon: Icon }) => {
+        const active =
+          pathname === prefix || pathname.startsWith(`${prefix}/`);
 
-      <Link
-        id="wd-dashboard-link"
-        href="/dashboard"
-        className="block bg-white py-3 text-center text-red-600 no-underline"
-      >
-        <AiOutlineDashboard className={icon} />
-        Dashboard
-      </Link>
-
-      <Link
-        id="wd-course-link"
-        href="/dashboard"
-        className={tile}
-      >
-        <LiaBookSolid className={icon} />
-        Courses
-      </Link>
-
-      <Link
-        id="wd-calendar-link"
-        href="/calendar"
-        className={tile}
-      >
-        <FaCalendarAlt className={icon} />
-        Calendar
-      </Link>
-
-      <Link
-        id="wd-inbox-link"
-        href="/inbox"
-        className={tile}
-      >
-        <FaInbox className={icon} />
-        Inbox
-      </Link>
-
-      {/* On your own practice: choose your preferred Labs icon. */}
-      <a
-        id="wd-labs-link"
-        href="/labs"
-        className={tile}
-      >
-        <FaFlask className={icon} />
-        Labs
-      </a>
-
-      {/* With AI: an additional sample tile. */}
-      <a
-        id="wd-ai-nav-help"
-        href="/labs"
-        className={tile}
-      >
-        <FaCircleQuestion className={icon} />
-        Help
-      </a>
+        return (
+          <Link
+            key={label}
+            id={`wd-${label.toLowerCase()}-link`}
+            href={href}
+            aria-current={active ? "page" : undefined}
+            className={`block py-3 text-center no-underline ${
+              active ? "bg-white text-red-600" : "bg-black text-white"
+            }`}
+          >
+            <Icon className="mx-auto mb-1 block text-3xl text-red-600" />
+            {label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }

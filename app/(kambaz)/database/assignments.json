@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "A1",
+    "course": "1234",
+    "title": "A1 - React Components",
+    "description": "Build reusable React components.",
+    "points": 100,
+    "dueDate": "2026-10-25"
+  },
+  {
+    "_id": "A2",
+    "course": "1234",
+    "title": "A2 - React Routing",
+    "description": "Create routes that use course identifiers.",
+    "points": 100,
+    "dueDate": "2026-11-01"
+  },
+  {
+    "_id": "A3",
+    "course": "2345",
+    "title": "A3 - Node File System",
+    "description": "Read and display files using Node.",
+    "points": 100,
+    "dueDate": "2026-10-25"
+  },
+  {
+    "_id": "A4",
+    "course": "2345",
+    "title": "A4 - Node HTTP Server",
+    "description": "Implement a small HTTP server.",
+    "points": 100,
+    "dueDate": "2026-11-01"
+  },
+  {
+    "_id": "A5",
+    "course": "3456",
+    "title": "A5 - MongoDB Queries",
+    "description": "Create and query a collection.",
+    "points": 100,
+    "dueDate": "2026-11-01"
+  }
+]

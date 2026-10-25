@@ -1,0 +1,55 @@
+[
+  {
+    "_id": "M101",
+    "course": "1234",
+    "name": "React Fundamentals",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Components",
+        "items": ["Create a component", "Pass props to a component"]
+      },
+      {
+        "_id": "L102",
+        "name": "Rendering Data",
+        "items": ["Map arrays into JSX", "Choose stable keys"]
+      }
+    ]
+  },
+  {
+    "_id": "M102",
+    "course": "1234",
+    "name": "React Routing",
+    "lessons": [
+      {
+        "_id": "L103",
+        "name": "Dynamic Routes",
+        "items": ["Read route parameters", "Build course links"]
+      }
+    ]
+  },
+  {
+    "_id": "M201",
+    "course": "2345",
+    "name": "Node Fundamentals",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Server JavaScript",
+        "items": ["Run a Node program", "Read files asynchronously"]
+      }
+    ]
+  },
+  {
+    "_id": "M301",
+    "course": "3456",
+    "name": "MongoDB Fundamentals",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Documents",
+        "items": ["Create a collection", "Query documents"]
+      }
+    ]
+  }
+]

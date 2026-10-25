@@ -1,0 +1,6 @@
+[
+  { "_id": "T1", "title": "Read Chapter 3", "completed": true },
+  { "_id": "T2", "title": "Build Lab 3", "completed": false },
+  { "_id": "T3", "title": "Connect Kambaz data", "completed": false },
+  { "_id": "T4", "title": "Verify the deployment", "completed": false }
+]

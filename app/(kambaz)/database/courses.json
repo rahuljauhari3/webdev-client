@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "1234",
+    "name": "CS1234 React JS",
+    "description": "Building React interfaces",
+    "image": "/images/reactjs.jpg"
+  },
+  {
+    "_id": "2345",
+    "name": "CS2345 Node JS",
+    "description": "Server-side JavaScript",
+    "image": "/images/nodejs.jpg"
+  },
+  {
+    "_id": "3456",
+    "name": "CS3456 MongoDB",
+    "description": "NoSQL databases",
+    "image": "/images/mongodb.jpg"
+  }
+]

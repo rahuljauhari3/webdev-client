@@ -1,0 +1,41 @@
+.lab3 section {
+  margin-block: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.lab3 h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.lab3 pre {
+  overflow-x: auto;
+  background: #f4f4f5;
+  padding: 1rem;
+}
+
+.lab3 table {
+  border-collapse: collapse;
+}
+
+.lab3 td,
+.lab3 th {
+  border: 1px solid #aaa;
+  padding: 0.5rem;
+}
+
+.lab3-box {
+  display: inline-block;
+  padding: 1rem;
+  margin: 0.25rem;
+  color: white;
+}
+
+.lab3-red { background-color: #b91c1c; }
+.lab3-blue { background-color: #1d4ed8; }
+.lab3-green { background-color: #15803d; }
+.lab3-purple { background-color: #7e22ce; }
+.lab3-orange { background-color: #9a3412; }
+.lab3-teal { background-color: #0f766e; }

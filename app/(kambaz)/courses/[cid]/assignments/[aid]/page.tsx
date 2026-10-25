@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+import { assignments } from "@/app/(kambaz)/database";
 import Link from "next/link";
 
 export default async function AssignmentEditor({
@@ -5,7 +7,12 @@ export default async function AssignmentEditor({
 }: {
   params: Promise<{ cid: string; aid: string }>;
 }) {
-  const { cid } = await params;
+  const { cid, aid } = await params;
+  const assignment = assignments.find(
+    (item) => item._id === aid && item.course === cid,
+  );
+
+  if (!assignment) notFound();
 
   const fieldClass =
     "block w-full min-w-0 rounded border border-neutral-300 " +
@@ -39,9 +46,10 @@ export default async function AssignmentEditor({
         </label>
 
         <input
+          key={`${assignment._id}-name`}
           id="wd-name"
           type="text"
-          defaultValue="A1 - ENV + HTML"
+          defaultValue={assignment.title}
           className={fieldClass}
         />
       </div>
@@ -52,9 +60,10 @@ export default async function AssignmentEditor({
         </label>
 
         <textarea
+          key={`${assignment._id}-description`}
           id="wd-description"
           rows={5}
-          defaultValue="The assignment is available online. Submit a link to the landing page of your Web application running on Vercel."
+          defaultValue={assignment.description}
           className={`${fieldClass} resize-y`}
         />
       </div>
@@ -65,12 +74,13 @@ export default async function AssignmentEditor({
             Points
           </label>
 
-          <input
-            id="wd-points"
-            type="number"
-            defaultValue={100}
-            className={fieldClass}
-          />
+        <input
+          key={`${assignment._id}-points`}
+          id="wd-points"
+          type="number"
+          defaultValue={assignment.points}
+          className={fieldClass}
+        />
         </div>
 
         <div className={rowClass}>
@@ -173,9 +183,10 @@ export default async function AssignmentEditor({
               </label>
 
               <input
+                key={`${assignment._id}-due`}
                 id="wd-due-date"
                 type="date"
-                defaultValue="2026-10-01"
+                defaultValue={assignment.dueDate}
                 className={fieldClass}
               />
             </div>
