@@ -1,9 +1,5 @@
 import Link from "next/link";
-import {
-  FaEllipsisV,
-  FaGripVertical,
-  FaRegFileAlt,
-} from "react-icons/fa";
+import { FaGripVertical, FaRegFileAlt } from "react-icons/fa";
 import GreenCheckmark from "../modules/GreenCheckmark";
 
 export default function AssignmentItem({
@@ -11,11 +7,15 @@ export default function AssignmentItem({
   aid,
   title,
   details,
+  canEdit,
+  onDelete,
 }: {
   cid: string;
   aid: string;
   title: string;
   details: string;
+  canEdit: boolean;
+  onDelete: () => void;
 }) {
   return (
     <li
@@ -38,32 +38,37 @@ export default function AssignmentItem({
       />
 
       <div className="min-w-0 flex-1">
-        <Link
-          href={`/courses/${cid}/assignments/${aid}`}
-          className="
+        {canEdit ? (
+          <Link
+            href={`/courses/${cid}/assignments/${aid}`}
+            className="
             wd-assignment-link
             font-semibold text-neutral-900
             no-underline hover:underline
           "
-        >
-          {title}
-        </Link>
+          >
+            {title}
+          </Link>
+        ) : (
+          <span className="font-semibold">{title}</span>
+        )}
 
-        <p className="m-0 mt-1 text-sm text-neutral-600">
-          {details}
-        </p>
+        <p className="m-0 mt-1 text-sm text-neutral-600">{details}</p>
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
         <GreenCheckmark />
 
-        <button
-          type="button"
-          aria-label={`More options for ${title}`}
-          className="border-0 bg-transparent p-1 text-neutral-600"
-        >
-          <FaEllipsisV aria-hidden="true" />
-        </button>
+        {canEdit && (
+          <button
+            type="button"
+            aria-label={`Delete assignment ${title}`}
+            onClick={onDelete}
+            className="text-red-600"
+          >
+            Delete
+          </button>
+        )}
       </div>
     </li>
   );

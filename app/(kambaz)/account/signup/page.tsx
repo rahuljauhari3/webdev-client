@@ -1,75 +1,81 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
+import { emptyUser, useAccountContext } from "../AccountContext";
 export default function Signup() {
-  const fieldClass =
-    "block w-full rounded border border-neutral-300 " +
-    "bg-white px-3 py-2 text-base " +
-    "focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
-
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [verify, setVerify] = useState("");
+  const [error, setError] = useState("");
+  const { users, saveUser, setCurrentUser } = useAccountContext();
+  const router = useRouter();
   return (
-    <div id="wd-signup-screen" className="w-full max-w-sm">
-      <h1 className="m-0 mb-5 text-2xl font-semibold">
-        Sign up
-      </h1>
-
-      <label className="mb-4 block">
-        <span className="mb-2 block font-medium">
-          Username
-        </span>
-
+    <form
+      id="wd-signup-screen"
+      className="a4-form w-full max-w-sm"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (password !== verify) {
+          setError("Passwords must match.");
+          return;
+        }
+        if (users.some((u) => u.username === username.trim())) {
+          setError("Username already exists.");
+          return;
+        }
+        const user = {
+          ...emptyUser,
+          _id: crypto.randomUUID(),
+          username: username.trim(),
+          password,
+        };
+        saveUser(user);
+        setCurrentUser(user);
+        router.push("/account/profile");
+      }}
+    >
+      <h1>Sign up</h1>
+      <label>
+        Username
         <input
+          id="wd-username"
+          className="wd-username"
           placeholder="username"
-          defaultValue="ada"
+          required
           autoComplete="username"
-          className={`wd-username ${fieldClass}`}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </label>
-
-      <label className="mb-4 block">
-        <span className="mb-2 block font-medium">
-          Password
-        </span>
-
+      <label>
+        Password
         <input
-          placeholder="password"
+          id="wd-password"
+          className="wd-password"
           type="password"
-          defaultValue="123"
+          required
           autoComplete="new-password"
-          className={`wd-password ${fieldClass}`}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </label>
-
-      <label className="mb-4 block">
-        <span className="mb-2 block font-medium">
-          Verify password
-        </span>
-
+      <label>
+        Verify password
         <input
-          placeholder="verify password"
+          className="wd-password-verify"
           type="password"
+          required
           autoComplete="new-password"
-          className={`wd-password-verify ${fieldClass}`}
+          value={verify}
+          onChange={(e) => setVerify(e.target.value)}
         />
       </label>
-
-      <Link
-        href="/account/profile"
-        className="
-          mb-3 block w-full rounded
-          bg-blue-600 px-3 py-2
-          text-center text-white no-underline
-          hover:bg-blue-700
-        "
-      >
+      {error && <p role="alert">{error}</p>}
+      <button id="wd-signup-btn" className="a4-primary">
         Sign up
-      </Link>
-
-      <Link
-        href="/account/signin"
-        className="text-blue-600 no-underline hover:underline"
-      >
-        Sign in
-      </Link>
-    </div>
+      </button>{" "}
+      <Link href="/account/signin">Sign in</Link>
+    </form>
   );
 }

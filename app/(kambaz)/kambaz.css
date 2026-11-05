@@ -44,3 +44,54 @@
   border-left-color: black;
   font-weight: 600;
 }
+#wd-kambaz button {
+  cursor: pointer;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+}
+#wd-kambaz button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+#wd-kambaz .a4-primary {
+  background: #2563eb;
+  color: white;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+}
+#wd-kambaz .a4-danger {
+  background: #dc2626;
+  color: white;
+}
+#wd-kambaz .a4-success {
+  background: #15803d;
+  color: white;
+}
+#wd-kambaz .a4-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+#wd-kambaz .a4-form input:not([type="checkbox"]),
+#wd-kambaz .a4-form textarea,
+#wd-kambaz .a4-form select {
+  display: block;
+  width: 100%;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  margin-top: 0.3rem;
+  background: white;
+}
+#wd-kambaz .a4-dialog {
+  border: 1px solid #a3a3a3;
+  border-radius: 8px;
+  padding: 1.5rem;
+  width: min(90vw, 480px);
+}
+#wd-kambaz .a4-dialog::backdrop {
+  background: #0008;
+}

@@ -1,80 +1,73 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
+import { useAccountContext } from "../AccountContext";
 export default function Signin() {
-  const fieldClass =
-    "block w-full rounded border border-neutral-300 " +
-    "bg-white px-3 py-2 text-base " +
-    "focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
-
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { users, setCurrentUser } = useAccountContext();
+  const router = useRouter();
   return (
-    <div id="wd-signin-screen" className="w-full max-w-sm">
-      <h1 className="m-0 mb-5 text-2xl font-semibold">
-        Sign in
-      </h1>
-
-      <label className="mb-4 block">
-        <span className="mb-2 block font-medium">
-          Username
-        </span>
-
+    <form
+      id="wd-signin-screen"
+      className="a4-form w-full max-w-sm"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const user = users.find(
+          (u) => u.username === username.trim() && u.password === password,
+        );
+        if (!user) {
+          setError("Invalid username or password.");
+          return;
+        }
+        setCurrentUser(user);
+        router.push("/dashboard");
+      }}
+    >
+      <h1>Sign in</h1>
+      <p>Demo users: rahul, alex, sam, or faculty. Password: 123.</p>
+      <label>
+        Username
         <input
-          placeholder="username"
-          defaultValue="ada"
+          id="wd-username"
+          className="wd-username"
           autoComplete="username"
-          className={`wd-username ${fieldClass}`}
+          required
+          placeholder="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </label>
-
-      <label className="mb-4 block">
-        <span className="mb-2 block font-medium">
-          Password
-        </span>
-
+      <label>
+        Password
         <input
-          placeholder="password"
+          id="wd-password"
+          className="wd-password"
           type="password"
-          defaultValue="123"
           autoComplete="current-password"
-          className={`wd-password ${fieldClass}`}
+          required
+          placeholder="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </label>
-
-      <div className="mb-4">
-        <label
-          htmlFor="wd-ai-signin-note"
-          className="mb-2 block font-medium"
-        >
-          Sample note
-        </label>
-
-        <input
-          id="wd-ai-signin-note"
-          type="text"
-          placeholder="sample note"
-          className={fieldClass}
-        />
-      </div>
-
-      <Link
-        id="wd-signin-btn"
-        href="/dashboard"
-        className="
-          mb-3 block w-full rounded
-          bg-blue-600 px-3 py-2
-          text-center text-white no-underline
-          hover:bg-blue-700
-        "
-      >
+      <label>
+        Sample note
+        <input id="wd-ai-signin-note" placeholder="sample note" />
+      </label>
+      {error && (
+        <p role="alert" className="text-red-600">
+          {error}
+        </p>
+      )}
+      <button id="wd-signin-btn" className="a4-primary" type="submit">
         Sign in
-      </Link>
-
-      <Link
-        id="wd-signup-link"
-        href="/account/signup"
-        className="text-blue-600 no-underline hover:underline"
-      >
+      </button>{" "}
+      <Link id="wd-signup-link" href="/account/signup">
         Sign up
       </Link>
-    </div>
+    </form>
   );
 }

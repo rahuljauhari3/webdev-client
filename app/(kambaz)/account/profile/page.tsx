@@ -1,126 +1,92 @@
-import Link from "next/link";
-
-export default function Profile() {
-  const fieldClass =
-    "block w-full rounded border border-neutral-300 " +
-    "bg-white px-3 py-2 text-base " +
-    "focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500";
-
-  const labelClass = "mb-2 block font-medium";
-
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAccountContext, type User } from "../AccountContext";
+function ProfileForm({ user }: { user: User }) {
+  const [profile, setProfile] = useState({ ...user });
+  const [message, setMessage] = useState("");
+  const { users, saveUser, setCurrentUser } = useAccountContext();
+  const router = useRouter();
+  const fields = [
+    { key: "username", label: "Username", type: "text" },
+    { key: "password", label: "Password", type: "password" },
+    { key: "firstName", label: "First Name", type: "text" },
+    { key: "lastName", label: "Last Name", type: "text" },
+    { key: "dob", label: "Date of Birth", type: "date" },
+    { key: "email", label: "Email", type: "email" },
+  ] as const;
   return (
-    <div id="wd-profile-screen" className="w-full max-w-sm">
-      <h1 className="m-0 mb-5 text-2xl font-semibold">
-        Profile
-      </h1>
-
-      <label className="mb-4 block">
-        <span className={labelClass}>Username</span>
-
-        <input
-          defaultValue="alice"
-          placeholder="username"
-          autoComplete="username"
-          className={`wd-username ${fieldClass}`}
-        />
-      </label>
-
-      <label className="mb-4 block">
-        <span className={labelClass}>Password</span>
-
-        <input
-          defaultValue="123"
-          placeholder="password"
-          type="password"
-          autoComplete="new-password"
-          className={`wd-password ${fieldClass}`}
-        />
-      </label>
-
-      <div className="mb-4">
-        <label htmlFor="wd-firstname" className={labelClass}>
-          First Name
+    <form
+      id="wd-profile-screen"
+      className="a4-form w-full max-w-sm"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (
+          users.some(
+            (u) =>
+              u._id !== profile._id && u.username === profile.username.trim(),
+          )
+        ) {
+          setMessage("Username already exists.");
+          return;
+        }
+        saveUser({ ...profile, username: profile.username.trim() });
+        setMessage("Profile updated.");
+      }}
+    >
+      <h1>Profile</h1>
+      {fields.map((f) => (
+        <label key={f.key}>
+          {f.label}
+          <input
+            id={`wd-${f.key.toLowerCase()}`}
+            className={`wd-${f.key}`}
+            type={f.type}
+            required={f.key === "username" || f.key === "password"}
+            value={profile[f.key]}
+            onChange={(e) =>
+              setProfile({ ...profile, [f.key]: e.target.value })
+            }
+          />
         </label>
-
-        <input
-          id="wd-firstname"
-          defaultValue="Alice"
-          placeholder="First Name"
-          autoComplete="given-name"
-          className={fieldClass}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="wd-lastname" className={labelClass}>
-          Last Name
-        </label>
-
-        <input
-          id="wd-lastname"
-          defaultValue="Wonderland"
-          placeholder="Last Name"
-          autoComplete="family-name"
-          className={fieldClass}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="wd-dob" className={labelClass}>
-          Date of Birth
-        </label>
-
-        <input
-          id="wd-dob"
-          defaultValue="2000-01-01"
-          type="date"
-          autoComplete="bday"
-          className={fieldClass}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="wd-email" className={labelClass}>
-          Email
-        </label>
-
-        <input
-          id="wd-email"
-          defaultValue="alice@wonderland"
-          type="email"
-          autoComplete="email"
-          className={fieldClass}
-        />
-      </div>
-
-      <div className="mb-5">
-        <label htmlFor="wd-role" className={labelClass}>
-          Role
-        </label>
-
+      ))}
+      <label>
+        Role
         <select
           id="wd-role"
-          defaultValue="FACULTY"
-          className={fieldClass}
+          value={profile.role}
+          onChange={(e) => setProfile({ ...profile, role: e.target.value })}
         >
-          <option value="USER">User</option>
-          <option value="ADMIN">Admin</option>
-          <option value="FACULTY">Faculty</option>
-          <option value="STUDENT">Student</option>
+          {["USER", "ADMIN", "FACULTY", "STUDENT", "TA"].map((r) => (
+            <option key={r}>{r}</option>
+          ))}
         </select>
-      </div>
-
-      <Link
-        href="/account/signin"
-        className="
-          block w-full rounded
-          bg-red-600 px-3 py-2
-          text-center text-white no-underline
-          hover:bg-red-700
-        "
+      </label>
+      <p role="status">{message}</p>
+      <button id="wd-update-profile" className="a4-primary">
+        Update
+      </button>{" "}
+      <button
+        id="wd-signout-btn"
+        className="a4-danger"
+        type="button"
+        onClick={() => {
+          setCurrentUser(null);
+          router.push("/account/signin");
+        }}
       >
         Sign out
-      </Link>
-    </div>
+      </button>
+    </form>
   );
+}
+export default function Profile() {
+  const { currentUser } = useAccountContext();
+  const router = useRouter();
+  useEffect(() => {
+    if (!currentUser) router.replace("/account/signin");
+  }, [currentUser, router]);
+  return currentUser ? (
+    <ProfileForm key={currentUser._id} user={currentUser} />
+  ) : null;
 }

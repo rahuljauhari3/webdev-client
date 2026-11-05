@@ -1,0 +1,58 @@
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+#wd-lab4,
+#wd-lab4-hooks {
+  font-family: system-ui, sans-serif;
+  max-width: 980px;
+  padding: 1rem;
+  color: #202020;
+}
+#wd-lab4 section,
+#wd-lab4-hooks section {
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 0;
+}
+#wd-lab4 button,
+#wd-lab4-hooks button {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #eff6ff;
+  color: #1e40af;
+  padding: 0.35rem 0.75rem;
+  margin: 0.2rem;
+  cursor: pointer;
+  font: inherit;
+}
+#wd-lab4 button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+#wd-lab4 input:not([type="checkbox"]):not([type="radio"]),
+#wd-lab4 select,
+#wd-lab4-hooks input:not([type="checkbox"]):not([type="radio"]),
+#wd-lab4-hooks select {
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  font: inherit;
+  max-width: 100%;
+}
+#wd-lab4 label,
+#wd-lab4-hooks label {
+  display: block;
+  margin: 0.4rem 0;
+}
+#wd-lab4 li {
+  margin: 0.35rem 0;
+}
+#wd-lab4 pre {
+  padding: 0.75rem;
+  background: #f5f5f5;
+  overflow: auto;
+}
+#wd-lab4 [role="alert"],
+#wd-lab4-hooks [role="alert"] {
+  padding: 0.5rem;
+  background: #fff3cd;
+}

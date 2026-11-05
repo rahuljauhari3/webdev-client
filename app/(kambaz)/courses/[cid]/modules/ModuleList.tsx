@@ -1,49 +1,32 @@
-import { modules } from "@/app/(kambaz)/database";
+"use client";
+import { useState } from "react";
+import { useModulesStore } from "@/app/(kambaz)/store/modulesStore";
 import Module from "./Module";
-import Lesson from "./Lesson";
-
+import ModuleEditor from "./ModuleEditor";
 export default function ModuleList({ cid }: { cid: string }) {
-  const courseModules = modules.filter((module) => module.course === cid);
-
+  const modules = useModulesStore((s) => s.modules);
+  const [showEditor, setShowEditor] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <button className="rounded border px-3 py-1.5" type="button">
-          Collapse All
+        <button onClick={() => setCollapsed(!collapsed)}>
+          {collapsed ? "Expand All" : "Collapse All"}
         </button>
-        <button className="rounded border px-3 py-1.5" type="button">
-          View Progress
-        </button>
-        <select
-          aria-label="Publish modules"
-          defaultValue="all"
-          className="rounded border px-3 py-1.5"
-        >
-          <option value="all">Publish All</option>
-        </select>
-        <button
-          type="button"
-          className="rounded bg-red-600 px-3 py-1.5 text-white"
-        >
+        <button className="a4-danger" onClick={() => setShowEditor(true)}>
           + Module
         </button>
       </div>
-
       <ul id="wd-modules" className="m-0 list-none p-0">
-        {courseModules.map((module) => (
-          <Module key={module._id} title={module.name}>
-            {module.lessons.map((lesson) => (
-              <Lesson key={lesson._id} title={lesson.name}>
-                {lesson.items.map((item) => (
-                  <li key={item} className="wd-content-item">
-                    {item}
-                  </li>
-                ))}
-              </Lesson>
-            ))}
-          </Module>
-        ))}
+        {modules
+          .filter((m) => m.course === cid)
+          .map((m) => (
+            <Module key={m._id} module={m} collapsed={collapsed} />
+          ))}
       </ul>
+      {showEditor && (
+        <ModuleEditor cid={cid} onClose={() => setShowEditor(false)} />
+      )}
     </div>
   );
 }

@@ -1,33 +1,31 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import { useAccountContext } from "./AccountContext";
 export default function AccountNavigation() {
   const pathname = usePathname();
-
-  const links = [
-    { href: "/account/signin", label: "Signin" },
-    { href: "/account/signup", label: "Signup" },
-    { href: "/account/profile", label: "Profile" },
-  ];
-
+  const { currentUser } = useAccountContext();
+  const links = currentUser
+    ? [{ href: "/account/profile", label: "Profile" }]
+    : [
+        { href: "/account/signin", label: "Sign in" },
+        { href: "/account/signup", label: "Sign up" },
+      ];
   return (
     <nav
       id="wd-account-navigation"
       aria-label="Account navigation"
       className="wd list-group text-lg"
     >
-      {links.map(({ href, label }) => (
+      {currentUser && <p>{currentUser.firstName || currentUser.username}</p>}
+      {links.map((l) => (
         <Link
-          key={href}
-          href={href}
-          aria-current={pathname === href ? "page" : undefined}
-          className={`list-group-item ${
-            pathname === href ? "active" : ""
-          }`}
+          key={l.href}
+          href={l.href}
+          aria-current={pathname === l.href ? "page" : undefined}
+          className={`list-group-item ${pathname === l.href ? "active" : ""}`}
         >
-          {label}
+          {l.label}
         </Link>
       ))}
     </nav>

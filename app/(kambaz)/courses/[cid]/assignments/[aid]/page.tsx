@@ -1,19 +1,26 @@
-import { notFound } from "next/navigation";
-import { assignments } from "@/app/(kambaz)/database";
+"use client";
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-
-export default async function AssignmentEditor({
-  params,
+import {
+  useAssignmentsStore,
+  emptyAssignment,
+  type Assignment,
+} from "@/app/(kambaz)/store/assignmentsStore";
+import { useAccountContext } from "@/app/(kambaz)/account/AccountContext";
+function EditorForm({
+  initial,
+  isNew,
 }: {
-  params: Promise<{ cid: string; aid: string }>;
+  initial: Assignment;
+  isNew: boolean;
 }) {
-  const { cid, aid } = await params;
-  const assignment = assignments.find(
-    (item) => item._id === aid && item.course === cid,
-  );
-
-  if (!assignment) notFound();
-
+  const [assignment, setAssignment] = useState({ ...initial });
+  const { addAssignment, updateAssignment } = useAssignmentsStore();
+  const router = useRouter();
+  const cid = assignment.course;
+  const change = (field: keyof Assignment, value: string | number | string[]) =>
+    setAssignment((previous) => ({ ...previous, [field]: value }));
   const fieldClass =
     "block w-full min-w-0 rounded border border-neutral-300 " +
     "bg-white px-3 py-2 text-base text-neutral-900 " +
@@ -24,8 +31,7 @@ export default async function AssignmentEditor({
   const rowClass =
     "grid items-start gap-2 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-4";
 
-  const rowLabelClass =
-    "block font-medium sm:pt-2 sm:text-right";
+  const rowLabelClass = "block font-medium sm:pt-2 sm:text-right";
 
   const entryOptions = [
     { id: "wd-text-entry", label: "Text Entry" },
@@ -36,7 +42,15 @@ export default async function AssignmentEditor({
   ];
 
   return (
-    <div
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!assignment.title.trim()) return;
+        const saved = { ...assignment, title: assignment.title.trim() };
+        if (isNew) addAssignment(saved);
+        else updateAssignment(saved);
+        router.push(`/courses/${cid}/assignments`);
+      }}
       id="wd-assignments-editor"
       className="w-full max-w-3xl pb-8"
     >
@@ -48,8 +62,10 @@ export default async function AssignmentEditor({
         <input
           key={`${assignment._id}-name`}
           id="wd-name"
+          required
           type="text"
-          defaultValue={assignment.title}
+          value={assignment.title}
+          onChange={(e) => change("title", e.target.value)}
           className={fieldClass}
         />
       </div>
@@ -63,7 +79,8 @@ export default async function AssignmentEditor({
           key={`${assignment._id}-description`}
           id="wd-description"
           rows={5}
-          defaultValue={assignment.description}
+          value={assignment.description}
+          onChange={(e) => change("description", e.target.value)}
           className={`${fieldClass} resize-y`}
         />
       </div>
@@ -74,13 +91,15 @@ export default async function AssignmentEditor({
             Points
           </label>
 
-        <input
-          key={`${assignment._id}-points`}
-          id="wd-points"
-          type="number"
-          defaultValue={assignment.points}
-          className={fieldClass}
-        />
+          <input
+            key={`${assignment._id}-points`}
+            id="wd-points"
+            min="0"
+            type="number"
+            value={assignment.points}
+            onChange={(e) => change("points", Number(e.target.value))}
+            className={fieldClass}
+          />
         </div>
 
         <div className={rowClass}>
@@ -90,7 +109,8 @@ export default async function AssignmentEditor({
 
           <select
             id="wd-group"
-            defaultValue="ASSIGNMENTS"
+            value={assignment.group}
+            onChange={(e) => change("group", e.target.value)}
             className={fieldClass}
           >
             <option value="ASSIGNMENTS">ASSIGNMENTS</option>
@@ -101,16 +121,14 @@ export default async function AssignmentEditor({
         </div>
 
         <div className={rowClass}>
-          <label
-            htmlFor="wd-display-grade-as"
-            className={rowLabelClass}
-          >
+          <label htmlFor="wd-display-grade-as" className={rowLabelClass}>
             Display Grade as
           </label>
 
           <select
             id="wd-display-grade-as"
-            defaultValue="Percentage"
+            value={assignment.gradeAs}
+            onChange={(e) => change("gradeAs", e.target.value)}
             className={fieldClass}
           >
             <option value="Percentage">Percentage</option>
@@ -119,17 +137,15 @@ export default async function AssignmentEditor({
         </div>
 
         <div className={rowClass}>
-          <label
-            htmlFor="wd-submission-type"
-            className={rowLabelClass}
-          >
+          <label htmlFor="wd-submission-type" className={rowLabelClass}>
             Submission Type
           </label>
 
           <div className="rounded border border-neutral-300 p-4">
             <select
               id="wd-submission-type"
-              defaultValue="Online"
+              value={assignment.submissionType}
+              onChange={(e) => change("submissionType", e.target.value)}
               className={fieldClass}
             >
               <option value="Online">Online</option>
@@ -148,7 +164,17 @@ export default async function AssignmentEditor({
                     <input
                       id={id}
                       type="checkbox"
-                      defaultChecked={id === "wd-website-url"}
+                      checked={assignment.entryOptions.includes(label)}
+                      onChange={(e) =>
+                        change(
+                          "entryOptions",
+                          e.target.checked
+                            ? [...assignment.entryOptions, label]
+                            : assignment.entryOptions.filter(
+                                (option) => option !== label,
+                              ),
+                        )
+                      }
                       className="h-4 w-4 accent-blue-600"
                     />
 
@@ -172,7 +198,8 @@ export default async function AssignmentEditor({
               <input
                 id="wd-assign-to"
                 type="text"
-                defaultValue="Everyone"
+                value={assignment.assignTo}
+                onChange={(e) => change("assignTo", e.target.value)}
                 className={fieldClass}
               />
             </div>
@@ -186,40 +213,37 @@ export default async function AssignmentEditor({
                 key={`${assignment._id}-due`}
                 id="wd-due-date"
                 type="date"
-                defaultValue={assignment.dueDate}
+                value={assignment.dueDate}
+                onChange={(e) => change("dueDate", e.target.value)}
                 className={fieldClass}
               />
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">
               <div>
-                <label
-                  htmlFor="wd-available-from"
-                  className={labelClass}
-                >
+                <label htmlFor="wd-available-from" className={labelClass}>
                   Available from
                 </label>
 
                 <input
                   id="wd-available-from"
                   type="date"
-                  defaultValue="2026-09-20"
+                  value={assignment.availableFrom}
+                  onChange={(e) => change("availableFrom", e.target.value)}
                   className={fieldClass}
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="wd-available-until"
-                  className={labelClass}
-                >
+                <label htmlFor="wd-available-until" className={labelClass}>
                   Until
                 </label>
 
                 <input
                   id="wd-available-until"
                   type="date"
-                  defaultValue="2026-10-08"
+                  value={assignment.availableUntil}
+                  onChange={(e) => change("availableUntil", e.target.value)}
                   className={fieldClass}
                 />
               </div>
@@ -235,6 +259,8 @@ export default async function AssignmentEditor({
 
         <textarea
           id="wd-ai-editor-notes"
+          value={assignment.notes}
+          onChange={(e) => change("notes", e.target.value)}
           rows={3}
           placeholder="Add sample assignment notes"
           className={`${fieldClass} resize-y`}
@@ -255,9 +281,9 @@ export default async function AssignmentEditor({
           Cancel
         </Link>
 
-        <Link
+        <button
+          type="submit"
           id="wd-save"
-          href={`/courses/${cid}/assignments`}
           className="
             rounded border border-red-600
             bg-red-600 px-4 py-2
@@ -266,8 +292,34 @@ export default async function AssignmentEditor({
           "
         >
           Save
-        </Link>
+        </button>
       </div>
-    </div>
+    </form>
+  );
+}
+export default function AssignmentEditor() {
+  const { cid, aid } = useParams<{ cid: string; aid: string }>();
+  const assignments = useAssignmentsStore((s) => s.assignments);
+  const { currentUser } = useAccountContext();
+  const initial =
+    aid === "new"
+      ? { ...emptyAssignment, course: cid }
+      : assignments.find((a) => a._id === aid && a.course === cid);
+  if (currentUser && !["FACULTY", "ADMIN"].includes(currentUser.role))
+    return (
+      <p>
+        Only faculty can edit assignments.{" "}
+        <Link href={`/courses/${cid}/assignments`}>Back to assignments</Link>
+      </p>
+    );
+  if (!initial)
+    return (
+      <p>
+        Assignment not found.{" "}
+        <Link href={`/courses/${cid}/assignments`}>Back to assignments</Link>
+      </p>
+    );
+  return (
+    <EditorForm key={`${cid}-${aid}`} initial={initial} isNew={aid === "new"} />
   );
 }
