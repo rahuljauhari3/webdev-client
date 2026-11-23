@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useConfirmation from "../components/useConfirmation";
 import CourseCard from "./CourseCard";
 import {
@@ -8,8 +8,9 @@ import {
   type Course,
 } from "../store/coursesStore";
 import { useEnrollmentsStore } from "../store/enrollmentsStore";
-import { useModulesStore } from "../store/modulesStore";
-import { useAssignmentsStore } from "../store/assignmentsStore";
+import * as client from "../courses/client";
+import useRequest from "../components/useRequest";
+
 import { useAccountContext } from "../account/AccountContext";
 export default function Dashboard() {
   const { courses, addCourse, updateCourse, deleteCourse } = useCoursesStore();
@@ -21,27 +22,31 @@ export default function Dashboard() {
   const enrolled = (id: string) =>
     !!currentUser &&
     enrollments.some((e) => e.user === currentUser._id && e.course === id);
-  const visible = courses.filter(
-    (c) => !currentUser || showAll || enrolled(c._id),
-  );
+  const { run, pending, feedback } = useRequest();
+  const [myCourses, setMyCourses] = useState<Course[]>([]);
+  useEffect(() => {
+    let active = true;
+    void run(async () => {
+      const rows = currentUser ? await client.findMyCourses() : [];
+      if (active) setMyCourses(rows);
+    });
+    return () => {
+      active = false;
+    };
+  }, [currentUser, enrollments, courses, run]);
+  const visible = !currentUser || showAll ? courses : myCourses;
   const canEdit =
-    !currentUser || ["FACULTY", "ADMIN"].includes(currentUser.role);
-  const remove = (id: string) => {
-    deleteCourse(id);
+    !!currentUser && ["FACULTY", "ADMIN"].includes(currentUser.role);
+  const remove = async (id: string) => {
+    await deleteCourse(id);
     removeCourse(id);
-    const ms = useModulesStore.getState();
-    ms.modules
-      .filter((m) => m.course === id)
-      .forEach((m) => ms.deleteModule(m._id));
-    const as = useAssignmentsStore.getState();
-    as.assignments
-      .filter((a) => a.course === id)
-      .forEach((a) => as.deleteAssignment(a._id, id));
     if (course._id === id) setCourse({ ...emptyCourse });
   };
   return (
     <div id="wd-dashboard">
       {confirmation}
+      {feedback}
+      {pending && <p role="status">Loading courses…</p>}
       <div className="flex items-center justify-between">
         <h1 id="wd-dashboard-title">Dashboard</h1>
         {currentUser && (
@@ -62,9 +67,11 @@ export default function Dashboard() {
           onSubmit={(e) => {
             e.preventDefault();
             if (!course.name.trim()) return;
-            const id = addCourse({ ...course, name: course.name.trim() });
-            if (currentUser) enroll(currentUser._id, id);
-            setCourse({ ...emptyCourse });
+            void run(async () => {
+              await addCourse({ ...course, name: course.name.trim() });
+              await useEnrollmentsStore.getState().load();
+              setCourse({ ...emptyCourse });
+            });
           }}
         >
           <h2>Course form</h2>
@@ -119,8 +126,10 @@ export default function Dashboard() {
               type="button"
               disabled={!course._id || !course.name.trim()}
               onClick={() => {
-                updateCourse({ ...course, name: course.name.trim() });
-                setCourse({ ...emptyCourse });
+                void run(async () => {
+                  await updateCourse({ ...course, name: course.name.trim() });
+                  setCourse({ ...emptyCourse });
+                });
               }}
             >
               Update
@@ -152,16 +161,21 @@ export default function Dashboard() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             onDelete={() =>
-              confirm(`Delete course "${c.name}"?`, () => remove(c._id))
+              confirm(`Delete course "${c.name}"?`, () => {
+                void run(() => remove(c._id));
+              })
             }
             canOpen={!currentUser || enrolled(c._id)}
             enrolled={enrolled(c._id)}
             onEnroll={
               currentUser
-                ? () =>
-                    enrolled(c._id)
-                      ? unenroll(currentUser._id, c._id)
-                      : enroll(currentUser._id, c._id)
+                ? () => {
+                    void run(() =>
+                      enrolled(c._id)
+                        ? unenroll(currentUser._id, c._id)
+                        : enroll(currentUser._id, c._id),
+                    );
+                  }
                 : undefined
             }
           />

@@ -1,5 +1,6 @@
 "use client";
 import useConfirmation from "@/app/(kambaz)/components/useConfirmation";
+import useRequest from "@/app/(kambaz)/components/useRequest";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import {
@@ -8,19 +9,21 @@ import {
 } from "@/app/(kambaz)/account/AccountContext";
 import { useEnrollmentsStore } from "@/app/(kambaz)/store/enrollmentsStore";
 export default function PeopleTable() {
+  const { run, feedback } = useRequest();
   const { cid } = useParams<{ cid: string }>();
   const { users, saveUser, currentUser } = useAccountContext();
   const { enrollments, enroll, unenroll } = useEnrollmentsStore();
   const { confirm, confirmation } = useConfirmation();
   const [person, setPerson] = useState({ ...emptyUser });
   const canEdit =
-    !currentUser || ["FACULTY", "ADMIN"].includes(currentUser.role);
+    !!currentUser && ["FACULTY", "ADMIN"].includes(currentUser.role);
   const people = users.filter((u) =>
     enrollments.some((e) => e.course === cid && e.user === u._id),
   );
   return (
     <div id="wd-people-table">
       {confirmation}
+      {feedback}
       <h2>People</h2>
       {canEdit && (
         <form
@@ -33,12 +36,14 @@ export default function PeopleTable() {
             const user = {
               ...person,
               username: person.username.trim(),
-              _id: person._id || existing?._id || crypto.randomUUID(),
+              _id: person._id || existing?._id || "",
               password: person.password || existing?.password || "123",
             };
-            saveUser(user);
-            enroll(user._id, cid);
-            setPerson({ ...emptyUser });
+            void run(async () => {
+              const saved = await saveUser(user);
+              await enroll(saved._id, cid);
+              setPerson({ ...emptyUser });
+            });
           }}
         >
           <h3>{person._id ? "Edit person" : "Add person"}</h3>
@@ -104,9 +109,9 @@ export default function PeopleTable() {
                     <button onClick={() => setPerson({ ...p })}>Edit</button>{" "}
                     <button
                       onClick={() => {
-                        confirm("Remove this person from the course?", () =>
-                          unenroll(p._id, cid),
-                        );
+                        confirm("Remove this person from the course?", () => {
+                          void run(() => unenroll(p._id, cid));
+                        });
                       }}
                     >
                       Remove

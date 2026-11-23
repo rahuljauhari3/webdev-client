@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import useRequest from "@/app/(kambaz)/components/useRequest";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import useConfirmation from "@/app/(kambaz)/components/useConfirmation";
@@ -8,15 +9,21 @@ import { useAssignmentsStore } from "@/app/(kambaz)/store/assignmentsStore";
 import { useAccountContext } from "@/app/(kambaz)/account/AccountContext";
 export default function Assignments() {
   const { cid } = useParams<{ cid: string }>();
+  const { run, pending, feedback } = useRequest();
+  useEffect(() => {
+    void run(() => useAssignmentsStore.getState().load(cid));
+  }, [cid, run]);
   const { assignments, deleteAssignment } = useAssignmentsStore();
   const { currentUser } = useAccountContext();
   const canEdit =
-    !currentUser || ["FACULTY", "ADMIN"].includes(currentUser.role);
+    !!currentUser && ["FACULTY", "ADMIN"].includes(currentUser.role);
   const { confirm, confirmation } = useConfirmation();
   const [search, setSearch] = useState("");
   return (
     <div id="wd-assignments">
       {confirmation}
+      {feedback}
+      {pending && <p role="status">Loading assignments…</p>}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <label>
           Search assignments{" "}
@@ -58,9 +65,9 @@ export default function Assignments() {
                 details={`Due ${a.dueDate || "not set"} | ${a.points} pts`}
                 canEdit={canEdit}
                 onDelete={() =>
-                  confirm(`Delete assignment "${a.title}"?`, () =>
-                    deleteAssignment(a._id, cid),
-                  )
+                  confirm(`Delete assignment "${a.title}"?`, () => {
+                    void run(() => deleteAssignment(a._id, cid));
+                  })
                 }
               />
             ))}

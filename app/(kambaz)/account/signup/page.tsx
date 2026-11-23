@@ -1,38 +1,36 @@
 "use client";
+import * as client from "../client";
+import { errorMessage } from "@/lib/http";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { emptyUser, useAccountContext } from "../AccountContext";
+import { useAccountContext } from "../AccountContext";
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [verify, setVerify] = useState("");
   const [error, setError] = useState("");
-  const { users, saveUser, setCurrentUser } = useAccountContext();
+  const { setCurrentUser } = useAccountContext();
   const router = useRouter();
   return (
     <form
       id="wd-signup-screen"
       className="a4-form w-full max-w-sm"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         if (password !== verify) {
           setError("Passwords must match.");
           return;
         }
-        if (users.some((u) => u.username === username.trim())) {
-          setError("Username already exists.");
-          return;
+        setError("");
+        try {
+          setCurrentUser(
+            await client.signup({ username: username.trim(), password }),
+          );
+          router.push("/account/profile");
+        } catch (e) {
+          setError(errorMessage(e));
         }
-        const user = {
-          ...emptyUser,
-          _id: crypto.randomUUID(),
-          username: username.trim(),
-          password,
-        };
-        saveUser(user);
-        setCurrentUser(user);
-        router.push("/account/profile");
       }}
     >
       <h1>Sign up</h1>

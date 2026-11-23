@@ -20,12 +20,33 @@ export default function TOC() {
     <nav aria-label="Labs navigation" className="p-2">
       <p className="font-semibold">Rahul Manish Jauhari</p>
       <a
-        href="https://github.com/rahuljauhari3/webdev-client"
+        id="wd-github"
+        href="https://github.com/rahuljauhari3/webdev-client/tree/a5"
         className="text-blue-700 underline"
       >
         GitHub repository
       </a>
 
+      <p>
+        <a
+          id="wd-node-github"
+          href="https://github.com/rahuljauhari3/webdev-server/tree/a5"
+          className="text-blue-700 underline"
+        >
+          Node server GitHub
+        </a>
+      </p>
+      {process.env.NEXT_PUBLIC_HTTP_SERVER && (
+        <p>
+          <a
+            id="wd-server"
+            href={process.env.NEXT_PUBLIC_HTTP_SERVER}
+            className="text-blue-700 underline"
+          >
+            HTTP server
+          </a>
+        </p>
+      )}
       <ul className="mt-4 space-y-2">
         {links.map(({ href, label }) => {
           const active =

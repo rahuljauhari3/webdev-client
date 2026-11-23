@@ -1,4 +1,6 @@
 "use client";
+import useRequest from "@/app/(kambaz)/components/useRequest";
+import { useAccountContext } from "@/app/(kambaz)/account/AccountContext";
 import { useState } from "react";
 import {
   FaEllipsisV,
@@ -20,11 +22,16 @@ export default function Module({
   module: CourseModule;
   collapsed: boolean;
 }) {
+  const { run, feedback } = useRequest();
+  const { currentUser } = useAccountContext();
+  const canEdit =
+    !!currentUser && ["FACULTY", "ADMIN"].includes(currentUser.role);
   const { updateModule, deleteModule } = useModulesStore();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(module.name);
   return (
     <li className="wd-module mb-5 overflow-hidden border border-neutral-400 p-0">
+      {feedback}
       <div className="wd-title flex flex-wrap items-center justify-between gap-3 bg-neutral-200 p-3 text-lg">
         <span className="flex items-center gap-2">
           <FaGripVertical aria-hidden />
@@ -34,8 +41,10 @@ export default function Module({
               onSubmit={(e) => {
                 e.preventDefault();
                 if (!name.trim()) return;
-                updateModule(module._id, name);
-                setEditing(false);
+                void run(async () => {
+                  await updateModule(module._id, name);
+                  setEditing(false);
+                });
               }}
             >
               <input
@@ -56,28 +65,32 @@ export default function Module({
             module.name
           )}
         </span>
-        <span className="flex shrink-0 items-center gap-3">
-          <button
-            aria-label={`Edit module ${module.name}`}
-            title="Edit module"
-            onClick={() => {
-              setName(module.name);
-              setEditing(true);
-            }}
-          >
-            <FaPencilAlt className="text-blue-600" />
-          </button>
-          <button
-            title="Delete module"
-            aria-label={`Delete module ${module.name}`}
-            onClick={() => deleteModule(module._id)}
-          >
-            <FaTrash className="text-red-600" />
-          </button>
-          <GreenCheckmark />
-          <FaPlus aria-hidden />
-          <FaEllipsisV aria-label="Module options" />
-        </span>
+        {canEdit && (
+          <span className="flex shrink-0 items-center gap-3">
+            <button
+              aria-label={`Edit module ${module.name}`}
+              title="Edit module"
+              onClick={() => {
+                setName(module.name);
+                setEditing(true);
+              }}
+            >
+              <FaPencilAlt className="text-blue-600" />
+            </button>
+            <button
+              title="Delete module"
+              aria-label={`Delete module ${module.name}`}
+              onClick={() => {
+                void run(() => deleteModule(module._id));
+              }}
+            >
+              <FaTrash className="text-red-600" />
+            </button>
+            <GreenCheckmark />
+            <FaPlus aria-hidden />
+            <FaEllipsisV aria-label="Module options" />
+          </span>
+        )}
       </div>
       {!collapsed && (
         <ul className="wd-lessons m-0 list-none p-0">

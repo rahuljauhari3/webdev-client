@@ -1,9 +1,11 @@
 "use client";
+import * as client from "../client";
+import { errorMessage } from "@/lib/http";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAccountContext, type User } from "../AccountContext";
 function ProfileForm({ user }: { user: User }) {
-  const [profile, setProfile] = useState({ ...user });
+  const [profile, setProfile] = useState({ ...user, password: "" });
   const [message, setMessage] = useState("");
   const { users, saveUser, setCurrentUser } = useAccountContext();
   const router = useRouter();
@@ -19,7 +21,7 @@ function ProfileForm({ user }: { user: User }) {
     <form
       id="wd-profile-screen"
       className="a4-form w-full max-w-sm"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         if (
           users.some(
@@ -30,8 +32,12 @@ function ProfileForm({ user }: { user: User }) {
           setMessage("Username already exists.");
           return;
         }
-        saveUser({ ...profile, username: profile.username.trim() });
-        setMessage("Profile updated.");
+        try {
+          await saveUser({ ...profile, username: profile.username.trim() });
+          setMessage("Profile updated.");
+        } catch (e) {
+          setMessage(errorMessage(e));
+        }
       }}
     >
       <h1>Profile</h1>
@@ -42,7 +48,7 @@ function ProfileForm({ user }: { user: User }) {
             id={`wd-${f.key.toLowerCase()}`}
             className={`wd-${f.key}`}
             type={f.type}
-            required={f.key === "username" || f.key === "password"}
+            required={f.key === "username"}
             value={profile[f.key]}
             onChange={(e) =>
               setProfile({ ...profile, [f.key]: e.target.value })
@@ -54,6 +60,7 @@ function ProfileForm({ user }: { user: User }) {
         Role
         <select
           id="wd-role"
+          disabled={!["FACULTY", "ADMIN"].includes(user.role)}
           value={profile.role}
           onChange={(e) => setProfile({ ...profile, role: e.target.value })}
         >
@@ -70,9 +77,14 @@ function ProfileForm({ user }: { user: User }) {
         id="wd-signout-btn"
         className="a4-danger"
         type="button"
-        onClick={() => {
-          setCurrentUser(null);
-          router.push("/account/signin");
+        onClick={async () => {
+          try {
+            await client.signout();
+            setCurrentUser(null);
+            router.push("/account/signin");
+          } catch (e) {
+            setMessage(errorMessage(e));
+          }
         }}
       >
         Sign out

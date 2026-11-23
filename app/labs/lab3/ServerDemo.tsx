@@ -1,8 +1,11 @@
 import { readdir } from "node:fs/promises";
 import os from "node:os";
+import path from "node:path";
 
 export default async function ServerDemo() {
-  const entries = await readdir(process.cwd(), { withFileTypes: true });
+  const entries = await readdir(path.join(process.cwd(), "public"), {
+    withFileTypes: true,
+  });
   const files = entries
     .filter((entry) => entry.isFile())
     .map((entry) => entry.name)
@@ -17,7 +20,7 @@ export default async function ServerDemo() {
   return (
     <section>
       <h3>Server Component</h3>
-      <h4>Files read on the server</h4>
+      <h4>Public files read on the server</h4>
       <ul>
         {files.map((file) => (
           <li key={file}>{file}</li>

@@ -1,0 +1,103 @@
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+#wd-lab5 {
+  max-width: 980px;
+  padding: 16px 28px 64px;
+  font:
+    16px/1.6 system-ui,
+    sans-serif;
+  color: #202938;
+}
+#wd-lab5 h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+#wd-lab5 h2 {
+  font-size: 1.25rem;
+  margin: 0 0 16px;
+}
+#wd-lab5 h3 {
+  margin-top: 28px;
+}
+#wd-lab5 section {
+  border: 1px solid #d6dce5;
+  border-radius: 8px;
+  padding: 24px;
+  margin: 20px 0;
+  background: white;
+}
+#wd-lab5 label {
+  display: block;
+  margin: 12px 0;
+}
+#wd-lab5 input:not([type="checkbox"]),
+#wd-lab5 select {
+  display: block;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 320px;
+  border: 1px solid #98a5b7;
+  border-radius: 5px;
+  padding: 8px;
+  font: inherit;
+}
+#wd-lab5 button,
+#wd-lab5 a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #2055bb;
+  border-radius: 5px;
+  background: #245dcc;
+  color: white;
+  padding: 7px 12px;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+#wd-lab5 button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+#wd-lab5 :focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+#wd-lab5 .lab-actions,
+#wd-lab5 .lab-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+#wd-lab5 pre {
+  overflow-x: auto;
+  background: #f2f5f9;
+  padding: 16px;
+}
+#wd-lab5 .lab-todos {
+  padding: 0;
+  list-style: none;
+}
+#wd-lab5 .lab-todos li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #d6dce5;
+}
+#wd-lab5 .completed {
+  text-decoration: line-through;
+}
+#wd-lab5 output {
+  margin-left: 16px;
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  #wd-lab5 {
+    padding: 12px;
+  }
+  #wd-lab5 section {
+    padding: 16px;
+  }
+}

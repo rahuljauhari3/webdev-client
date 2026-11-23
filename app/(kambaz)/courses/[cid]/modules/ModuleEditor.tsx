@@ -1,4 +1,5 @@
 "use client";
+import useRequest from "@/app/(kambaz)/components/useRequest";
 import { useEffect, useRef, useState } from "react";
 import { useModulesStore } from "@/app/(kambaz)/store/modulesStore";
 export default function ModuleEditor({
@@ -8,6 +9,7 @@ export default function ModuleEditor({
   cid: string;
   onClose: () => void;
 }) {
+  const { run, pending, feedback } = useRequest();
   const [name, setName] = useState("");
   const dialog = useRef<HTMLDialogElement>(null);
   const addModule = useModulesStore((s) => s.addModule);
@@ -28,10 +30,13 @@ export default function ModuleEditor({
         onSubmit={(e) => {
           e.preventDefault();
           if (!name.trim()) return;
-          addModule(cid, name);
-          onClose();
+          void run(async () => {
+            await addModule(cid, name);
+            onClose();
+          });
         }}
       >
+        {feedback}
         <h2 id="wd-module-dialog-title">Add Module</h2>
         <label>
           Module name
@@ -48,7 +53,7 @@ export default function ModuleEditor({
           <button type="button" onClick={onClose}>
             Cancel
           </button>
-          <button className="a4-danger" disabled={!name.trim()}>
+          <button className="a4-danger" disabled={pending || !name.trim()}>
             Add Module
           </button>
         </div>

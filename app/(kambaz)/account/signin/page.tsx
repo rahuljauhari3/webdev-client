@@ -1,4 +1,6 @@
 "use client";
+import * as client from "../client";
+import { errorMessage } from "@/lib/http";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,23 +9,25 @@ export default function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { users, setCurrentUser } = useAccountContext();
+  const { setCurrentUser } = useAccountContext();
   const router = useRouter();
   return (
     <form
       id="wd-signin-screen"
       className="a4-form w-full max-w-sm"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        const user = users.find(
-          (u) => u.username === username.trim() && u.password === password,
-        );
-        if (!user) {
-          setError("Invalid username or password.");
-          return;
+        setError("");
+        try {
+          const user = await client.signin({
+            username: username.trim(),
+            password,
+          });
+          setCurrentUser(user);
+          router.push("/dashboard");
+        } catch (e) {
+          setError(errorMessage(e));
         }
-        setCurrentUser(user);
-        router.push("/dashboard");
       }}
     >
       <h1>Sign in</h1>

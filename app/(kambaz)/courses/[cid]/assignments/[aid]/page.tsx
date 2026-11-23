@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import useRequest from "@/app/(kambaz)/components/useRequest";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -15,6 +16,7 @@ function EditorForm({
   initial: Assignment;
   isNew: boolean;
 }) {
+  const { run, pending, feedback } = useRequest();
   const [assignment, setAssignment] = useState({ ...initial });
   const { addAssignment, updateAssignment } = useAssignmentsStore();
   const router = useRouter();
@@ -47,13 +49,16 @@ function EditorForm({
         e.preventDefault();
         if (!assignment.title.trim()) return;
         const saved = { ...assignment, title: assignment.title.trim() };
-        if (isNew) addAssignment(saved);
-        else updateAssignment(saved);
-        router.push(`/courses/${cid}/assignments`);
+        void run(async () => {
+          if (isNew) await addAssignment(saved);
+          else await updateAssignment(saved);
+          router.push(`/courses/${cid}/assignments`);
+        });
       }}
       id="wd-assignments-editor"
       className="w-full max-w-3xl pb-8"
     >
+      {feedback}
       <div className="mb-5">
         <label htmlFor="wd-name" className={labelClass}>
           Assignment Name
@@ -284,6 +289,7 @@ function EditorForm({
         <button
           type="submit"
           id="wd-save"
+          disabled={pending}
           className="
             rounded border border-red-600
             bg-red-600 px-4 py-2
@@ -299,18 +305,33 @@ function EditorForm({
 }
 export default function AssignmentEditor() {
   const { cid, aid } = useParams<{ cid: string; aid: string }>();
+  const { run, feedback } = useRequest();
+  const [loaded, setLoaded] = useState<string | null>(null);
+  useEffect(() => {
+    void run(async () => {
+      await useAssignmentsStore.getState().load(cid);
+      setLoaded(cid);
+    });
+  }, [cid, run]);
   const assignments = useAssignmentsStore((s) => s.assignments);
   const { currentUser } = useAccountContext();
   const initial =
     aid === "new"
       ? { ...emptyAssignment, course: cid }
       : assignments.find((a) => a._id === aid && a.course === cid);
-  if (currentUser && !["FACULTY", "ADMIN"].includes(currentUser.role))
+  if (!currentUser || !["FACULTY", "ADMIN"].includes(currentUser.role))
     return (
       <p>
         Only faculty can edit assignments.{" "}
         <Link href={`/courses/${cid}/assignments`}>Back to assignments</Link>
       </p>
+    );
+  if (loaded !== cid)
+    return (
+      <>
+        {feedback}
+        <p role="status">Loading assignment…</p>
+      </>
     );
   if (!initial)
     return (
